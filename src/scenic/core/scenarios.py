@@ -259,7 +259,8 @@ class Scene(_ScenarioPickleMixin):
         if axes:
             flags["axis"] = "world"
 
-        return render_scene.show(flags=flags)
+        return render_scene.save_image(resolution=(1080,1080))
+        # return render_scene.show(flags=flags)
 
     def show2D(self, zoom=None, block=True):
         """Render a 2D schematic of the scene for debugging."""

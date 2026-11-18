@@ -278,7 +278,6 @@ try:
                 if success:
                     successCount += 1
             else:
-                successCount += 1
                 if mode2D:
                     if delay is None:
                         scene.show2D(zoom=args.zoom)
@@ -287,7 +286,12 @@ try:
                         plt.pause(delay)
                         plt.clf()
                 else:
-                    scene.show(axes=args.axes)
+                    img_bytes = scene.show(axes=args.axes)
+                    filename = f"output_{successCount:03d}.png"
+                    with open(filename, 'wb') as f:
+                        f.write(img_bytes)
+                    print(f"saved to \"{filename}\"")
+                successCount += 1
 
             if 0 < args.count <= successCount:
                 break
