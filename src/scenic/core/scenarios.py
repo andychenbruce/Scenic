@@ -3,6 +3,7 @@
 import dataclasses
 import io
 import itertools
+import os
 import random
 import sys
 import time
@@ -255,12 +256,18 @@ class Scene(_ScenarioPickleMixin):
                 )
             )
 
-        flags = dict()
-        if axes:
-            flags["axis"] = "world"
+        # Render with PyTorch3D's differentiable rasterizer when it is
+        # available.  The trimesh/pyglet viewer is kept as a fallback for
+        # environments where PyTorch3D has not been installed.
+        renderer = os.environ.get("SCENIC_RENDERER", "pytorch3d").lower()
+        if renderer not in ("trimesh", "pyglet", "none"):
+            try:
+                from scenic.core.pytorch3d_renderer import renderScene
 
-        return render_scene.save_image(resolution=(1080,1080))
-        # return render_scene.show(flags=flags)
+                return renderScene(render_scene, resolution=(1080, 1080), axes=axes)
+            except ImportError:
+                pass
+        return render_scene.save_image(resolution=(1080, 1080))
 
     def show2D(self, zoom=None, block=True):
         """Render a 2D schematic of the scene for debugging."""

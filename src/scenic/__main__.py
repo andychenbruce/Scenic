@@ -258,7 +258,7 @@ def runSimulation(scene, sceneCount):
 try:
     if args.gather_stats is None:
         # Generate scenes interactively until killed/count reached
-        if not args.simulate:  # will need matplotlib to draw scene schematic
+        if not args.simulate and mode2D:  # 2D scene schematics use matplotlib
             import matplotlib
             import matplotlib.pyplot as plt
 

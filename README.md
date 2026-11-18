@@ -24,3 +24,22 @@ The repository is organized as follows:
 * the _assets_ directory contains meshes and other resources used by the examples and tests;
 * the _docs_ directory contains the sources for the documentation;
 * the _tests_ directory contains tests for the Scenic tool.
+
+## Rendering scenes
+
+By default the `scenic` command renders 3D scene diagrams with
+[PyTorch3D](https://github.com/facebookresearch/pytorch3d)'s differentiable mesh
+rasterizer, using a CUDA device when one is available.  If PyTorch3D is not
+importable it transparently falls back to the older trimesh/pyglet viewer.
+Set `SCENIC_RENDERER=trimesh` to force the legacy viewer, or
+`SCENIC_PYTORCH3D_DEVICE=cuda:1` to choose a different GPU.
+
+PyTorch3D has no wheel for Scenic's default Python 3.14 virtualenv, so
+`run.sh` looks for a separate environment as well.  You can create one with:
+
+```bash
+tools/setup_pytorch3d_env.sh
+```
+
+This builds a Python 3.12 environment (default `/opt/p3d-env`) with PyTorch3D,
+PyTorch and CUDA 12.1.  `run.sh` picks it up automatically.
